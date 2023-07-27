@@ -1,5 +1,6 @@
 package com.cocus.codewars.di
 
+import com.cocus.codewars.data.remote.services.CodewarsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-private const val BASE_URL = "https://api.spacexdata.com/v3/"
+private const val BASE_URL = "https://www.codewars.com/api/v1/"
 
 private const val HTTP_REQUEST_READ_TIMEOUT = 30L
 private const val HTTP_REQUEST_WRITE_TIMEOUT = 30L
@@ -48,5 +49,11 @@ object NetworkModule {
             .addInterceptor(logging)
 
         return builder.build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCodewarsApi(retrofit: Retrofit): CodewarsApi {
+        return retrofit.create(CodewarsApi::class.java)
     }
 }
