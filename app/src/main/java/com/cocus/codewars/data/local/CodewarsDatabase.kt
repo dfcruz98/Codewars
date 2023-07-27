@@ -3,7 +3,7 @@ package com.cocus.codewars.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.cocus.codewars.data.local.dao.ChallengesDao
+import com.cocus.codewars.data.local.dao.CompletedChallengesDao
 import com.cocus.codewars.data.local.dao.CompletedChallengesPagesDao
 import com.cocus.codewars.data.local.entities.CompletedChallengeEntity
 import com.cocus.codewars.data.local.entities.CompletedChallengePageEntity
@@ -18,7 +18,7 @@ const val DATABASE_NAME = "Codewars"
 @TypeConverters(Converters::class)
 abstract class CodewarsDatabase : RoomDatabase() {
 
-    abstract fun challengesDao(): ChallengesDao
+    abstract fun challengesDao(): CompletedChallengesDao
 
     abstract fun completedChallengesPagesDao(): CompletedChallengesPagesDao
 }

@@ -7,7 +7,7 @@ import androidx.room.Upsert
 import com.cocus.codewars.data.local.entities.CompletedChallengeEntity
 
 @Dao
-interface ChallengesDao {
+interface CompletedChallengesDao {
 
     @Upsert
     suspend fun upsertCompletedChallenges(challenges: List<CompletedChallengeEntity>)
