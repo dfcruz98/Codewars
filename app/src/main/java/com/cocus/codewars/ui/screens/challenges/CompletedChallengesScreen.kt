@@ -51,16 +51,18 @@ import java.time.format.FormatStyle
 
 @Composable
 fun CompletedChallengesRoute(
+    onClick: (CompletedChallenge) -> Unit,
     viewModel: CompletedChallengesViewModel = hiltViewModel()
 ) {
     val completedChallenges = viewModel.completedChallenges.collectAsLazyPagingItems()
-    CompletedChallengesScreen(completedChallenges)
+    CompletedChallengesScreen(completedChallenges, onClick)
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 internal fun CompletedChallengesScreen(
     challenges: LazyPagingItems<CompletedChallenge>,
+    onClick: (CompletedChallenge) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -104,9 +106,7 @@ internal fun CompletedChallengesScreen(
             ) {
                 items(count = challenges.itemCount) { index ->
                     challenges[index]?.let { challenge ->
-                        CompletedChallengeItem(challenge) {
-
-                        }
+                        CompletedChallengeItem(challenge = challenge, onClick = onClick)
                     }
                 }
 

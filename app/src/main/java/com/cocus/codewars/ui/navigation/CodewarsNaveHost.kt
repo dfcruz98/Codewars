@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.cocus.codewars.ui.screens.challengedetails.challengesDetailsScreen
+import com.cocus.codewars.ui.screens.challengedetails.navigateToChallengeDetails
 import com.cocus.codewars.ui.screens.challenges.completedChallengesNavigationRoute
 import com.cocus.codewars.ui.screens.challenges.completedChallengesScreen
 
@@ -17,6 +19,9 @@ fun CodewarsNaveHost(
         startDestination = completedChallengesNavigationRoute,
         modifier = modifier,
     ) {
-        completedChallengesScreen()
+        completedChallengesScreen {
+            navController.navigateToChallengeDetails()
+        }
+        challengesDetailsScreen()
     }
 }

@@ -86,6 +86,7 @@ dependencies {
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
     implementation("androidx.paging:paging-compose:3.2.0-rc01")
     implementation("androidx.compose.material:material:1.0.0")
+    implementation("androidx.compose.material:material-icons-extended:1.4.3")
 
 
     implementation("com.google.code.gson:gson:2.9.0")
