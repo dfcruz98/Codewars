@@ -52,7 +52,7 @@ class CompletedChallengesMediator @Inject constructor(
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    database.challengesDao().deleteAll()
+                    database.completedChallengesDao().deleteAll()
                     database.completedChallengesPagesDao().deleteAll()
                 }
 
@@ -70,7 +70,7 @@ class CompletedChallengesMediator @Inject constructor(
                     )
                 }
 
-                database.challengesDao().upsertCompletedChallenges(challenges)
+                database.completedChallengesDao().upsertCompletedChallenges(challenges)
                 database.completedChallengesPagesDao().insertOrReplace(pages)
             }
 
