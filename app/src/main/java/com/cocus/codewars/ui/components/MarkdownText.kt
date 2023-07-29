@@ -7,13 +7,13 @@ import android.view.ViewTreeObserver
 import android.widget.TextView
 import androidx.annotation.FontRes
 import androidx.annotation.IdRes
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalContentColor
-import androidx.compose.material.LocalTextStyle
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
@@ -42,7 +42,7 @@ fun MarkdownText(
     @IdRes viewId: Int? = null,
     textTruncated: (Boolean) -> Unit = {}
 ) {
-    val defaultColor = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+    val defaultColor = LocalContentColor.current.copy(alpha = DefaultAlpha)
     val context = LocalContext.current
     val markdownRender = remember { createMarkdownRender(context) }
     AndroidView(

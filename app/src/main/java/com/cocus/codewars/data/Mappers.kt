@@ -12,6 +12,12 @@ import com.cocus.codewars.domain.models.Challenge
 import com.cocus.codewars.domain.models.CompletedChallenge
 import com.cocus.codewars.domain.models.CreatedBy
 import com.cocus.codewars.domain.models.Rank
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 fun CompletedChallengeDto.toCompletedChallengeEntity(user: String) = CompletedChallengeEntity(
     id = id,
@@ -22,13 +28,18 @@ fun CompletedChallengeDto.toCompletedChallengeEntity(user: String) = CompletedCh
     completedLanguages = completedLanguages,
 )
 
-fun CompletedChallengeEntity.toCompletedChallenge() = CompletedChallenge(
-    id = id,
-    name = name,
-    slug = slug,
-    completedAt = completedAt,
-    completedLanguages = completedLanguages,
-)
+fun CompletedChallengeEntity.toCompletedChallenge(): CompletedChallenge {
+    val timestampInstant = Instant.parse(completedAt)
+    val zone = ZonedDateTime.ofInstant(timestampInstant, ZoneId.systemDefault())
+    val date = zone.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))
+    return CompletedChallenge(
+        id = id,
+        name = name,
+        slug = slug,
+        completedAt = date,
+        completedLanguages = completedLanguages,
+    )
+}
 
 fun ChallengeDto.toChallengeEntity() = ChallengeEntity(
     id = this.id,

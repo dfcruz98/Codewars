@@ -3,19 +3,27 @@ package com.cocus.codewars.ui.screens.challengedetails
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 
-const val challengeDetailName = "name"
-const val challengeDetailsNavigationRoute = "challenge/{name}"
+const val challengeDetailsId = "challengeId"
+const val challengeDetailsNavigationRoute = "challenge/{challengeId}"
 
-fun NavController.navigateToChallengeDetails(navOptions: NavOptions? = null) {
-    this.navigate(challengeDetailsNavigationRoute, navOptions)
+fun NavController.navigateToChallengeDetails(
+    challengeId: String,
+    navOptions: NavOptions? = null
+) {
+    this.navigate("challenge/$challengeId", navOptions)
 }
 
-fun NavGraphBuilder.challengesDetailsScreen() {
+fun NavGraphBuilder.challengesDetailsScreen(onBackClick: () -> Unit) {
     composable(
         route = challengeDetailsNavigationRoute,
-    ) { backStackEntry ->
-        ChallengeDetailsRoute(backStackEntry.arguments?.getString(challengeDetailName))
+        arguments = listOf(
+            navArgument(challengeDetailsId) { type = NavType.StringType },
+        ),
+    ) {
+        ChallengeDetailsRoute(onBackClick)
     }
 }

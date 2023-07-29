@@ -15,6 +15,9 @@ interface ChallengeDao {
     @Query("SELECT * FROM challenges WHERE id = :id")
     fun get(id: String): Flow<ChallengeEntity?>
 
+    @Query("SELECT * FROM challenges")
+    fun getAll(): Flow<ChallengeEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(challenge: ChallengeEntity)
 

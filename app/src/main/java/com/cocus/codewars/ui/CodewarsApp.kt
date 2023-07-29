@@ -1,8 +1,11 @@
 package com.cocus.codewars.ui
 
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
@@ -16,12 +19,19 @@ fun CodewarsApp(
 
     val navController = rememberNavController()
 
-    Scaffold(
-        modifier = modifier
-    ) { paddings ->
-        CodewarsNaveHost(
-            navController = navController,
-            modifier = Modifier.padding(paddings),
-        )
+    Surface(
+        color = MaterialTheme.colorScheme.background,
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        Scaffold(
+            modifier = modifier
+        ) { paddings ->
+            CodewarsNaveHost(
+                navController = navController,
+                modifier = Modifier.padding(paddings),
+            )
+        }
     }
+
+
 }

@@ -19,63 +19,74 @@ import javax.inject.Inject
 class CompletedChallengesMediator @Inject constructor(
     private val user: String,
     private val database: CodewarsDatabase,
-    private val service: CodewarsApi,
+    private val api: CodewarsApi,
 ) : RemoteMediator<Int, CompletedChallengeEntity>() {
+
+    private val completedChallengesDao = database.completedChallengesDao()
+    private val completedChallengesPagesDao = database.completedChallengesPagesDao()
 
     override suspend fun load(
         loadType: LoadType,
         state: PagingState<Int, CompletedChallengeEntity>
     ): MediatorResult {
         return try {
+            Log.d("CompletedChallengesMediator", "loadType=$loadType")
+
             val currentPage = when (loadType) {
-                LoadType.REFRESH -> 0
-                LoadType.PREPEND -> return MediatorResult.Success(
-                    endOfPaginationReached = true
-                )
+                LoadType.REFRESH -> {
+                    val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                    remoteKeys?.nextPage?.minus(1) ?: 0
+                }
+
+                LoadType.PREPEND -> {
+                    val remoteKeys = getRemoteKeyForFirstItem(state)
+                    val prevPage = remoteKeys?.previousPage ?: return MediatorResult.Success(
+                        endOfPaginationReached = remoteKeys != null
+                    )
+                    prevPage
+                }
 
                 LoadType.APPEND -> {
-                    getLastPage(state)?.nextPage ?: return MediatorResult.Success(
-                        endOfPaginationReached = true
+                    val remoteKeys = getRemoteKeyForLastItem(state)
+                    val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(
+                        endOfPaginationReached = remoteKeys != null
                     )
+                    nextPage
                 }
             }
 
-            val request = service.getCompletedChallenges(user, currentPage)
+            val response = api.getCompletedChallenges(user, currentPage)
+            val endOfPaginationReached = response.data.isEmpty()
 
             val prevPage = if (currentPage == 0) null else currentPage - 1
-            val nextPage = if (request.totalPages == currentPage) null else currentPage + 1
-
-            Log.d(
-                "CompletedChallengesMediator",
-                "currentPage=$currentPage, prevPage=$prevPage, nextPage=$nextPage"
-            )
+            val nextPage = if (endOfPaginationReached) null else currentPage + 1
 
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    database.completedChallengesDao().deleteAll()
-                    database.completedChallengesPagesDao().deleteAll()
+                    completedChallengesDao.deleteAll()
+                    completedChallengesPagesDao.deleteAll()
                 }
 
                 val challenges = mutableListOf<CompletedChallengeEntity>()
                 val pages = mutableListOf<CompletedChallengePageEntity>()
 
-                request.data.forEach {
-                    challenges.add(it.toCompletedChallengeEntity(user))
+                response.data.forEach { challenge ->
+                    challenges.add(challenge.toCompletedChallengeEntity(user))
                     pages.add(
                         CompletedChallengePageEntity(
-                            user = user,
+                            challengeId = challenge.id,
                             previousPage = prevPage,
                             nextPage = nextPage
                         )
                     )
                 }
 
-                database.completedChallengesDao().upsertCompletedChallenges(challenges)
-                database.completedChallengesPagesDao().insertOrReplace(pages)
+                completedChallengesDao.upsertCompletedChallenges(challenges)
+                completedChallengesPagesDao.insert(pages)
             }
 
             MediatorResult.Success(
-                endOfPaginationReached = request.totalItems == request.totalPages
+                endOfPaginationReached = endOfPaginationReached
             )
         } catch (io: IOException) {
             return MediatorResult.Error(io)
@@ -84,12 +95,31 @@ class CompletedChallengesMediator @Inject constructor(
         }
     }
 
-    private suspend fun getLastPage(
+    private suspend fun getRemoteKeyClosestToCurrentPosition(
+        state: PagingState<Int, CompletedChallengeEntity>
+    ): CompletedChallengePageEntity? {
+        return state.anchorPosition?.let { position ->
+            state.closestItemToPosition(position)?.id?.let { id ->
+                completedChallengesPagesDao.get(id = id)
+            }
+        }
+    }
+
+    private suspend fun getRemoteKeyForFirstItem(
+        state: PagingState<Int, CompletedChallengeEntity>
+    ): CompletedChallengePageEntity? {
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
+            ?.let { challenge ->
+                completedChallengesPagesDao.get(id = challenge.id)
+            }
+    }
+
+    private suspend fun getRemoteKeyForLastItem(
         state: PagingState<Int, CompletedChallengeEntity>
     ): CompletedChallengePageEntity? {
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
-            ?.let {
-                database.completedChallengesPagesDao().remoteKeyById(id = it.id)
+            ?.let { challenge ->
+                completedChallengesPagesDao.get(id = challenge.id)
             }
     }
 

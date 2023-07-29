@@ -19,9 +19,11 @@ fun CodewarsNaveHost(
         startDestination = completedChallengesNavigationRoute,
         modifier = modifier,
     ) {
-        completedChallengesScreen {
-            navController.navigateToChallengeDetails()
+        completedChallengesScreen { challenge ->
+            navController.navigateToChallengeDetails(challenge.id)
         }
-        challengesDetailsScreen()
+        challengesDetailsScreen {
+            navController.popBackStack()
+        }
     }
 }

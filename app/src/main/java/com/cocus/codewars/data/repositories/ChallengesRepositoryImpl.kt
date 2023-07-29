@@ -26,16 +26,19 @@ class ChallengesRepositoryImpl @Inject constructor(
 ) : ChallengesRepository {
 
     override fun getCompletedChallenges(user: String): Flow<PagingData<CompletedChallenge>> {
-        val pagingSourceFactory = { database.completedChallengesDao().pagingSource() }
         return Pager(
-            config = PagingConfig(pageSize = 10),
+            config = PagingConfig(pageSize = 200),
             remoteMediator = CompletedChallengesMediator(
                 user = user,
                 database = database,
-                service = codewarsApi,
+                api = codewarsApi,
             ),
-            pagingSourceFactory = pagingSourceFactory
-        ).flow.map { paging -> paging.map { it.toCompletedChallenge() } }
+            pagingSourceFactory = { database.completedChallengesDao().pagingSource() }
+        )
+            .flow
+            .map { paging ->
+                paging.map { it.toCompletedChallenge() }
+            }
     }
 
     override fun getChallenge(name: String): Flow<Challenge?> {
@@ -51,9 +54,13 @@ class ChallengesRepositoryImpl @Inject constructor(
 
     override suspend fun refreshChallenge(name: String) {
         val result = codewarsApi.getChallenge(name)
-        result
-            .toChallengeEntity()
-            .also { challenge -> database.challengeDao().insert(challenge) }
+        result.body()
+            ?.toChallengeEntity()
+            .also { challenge ->
+                challenge?.let {
+                    database.challengeDao().insert(challenge)
+                }
+            }
     }
 
 }
