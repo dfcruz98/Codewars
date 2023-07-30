@@ -1,6 +1,5 @@
 package com.cocus.codewars.ui.screens.challengedetails
 
-import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PanoramaFishEye
 import androidx.compose.material.icons.filled.Person
@@ -20,6 +18,7 @@ import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,15 +47,15 @@ fun ChallengeDetailsRoute(
 }
 
 @Composable
-fun ChallengesDetailsScreen(
-    state: ChallengeUiState,
-    modifier: Modifier = Modifier
+private fun ChallengesDetailsScreen(
+    uiState: ChallengeUiState,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
     ) {
-        when (state) {
+        when (uiState) {
             ChallengeUiState.Error -> {
                 Toast.makeText(
                     LocalContext.current,
@@ -74,8 +73,8 @@ fun ChallengesDetailsScreen(
             }
 
             is ChallengeUiState.Success -> {
-                state.challenge?.let { challenge ->
-                    ChallengeDetail(challenge)
+                uiState.challenge?.let { challenge ->
+                    ChallengeDetails(challenge)
                 }
             }
         }
@@ -83,9 +82,9 @@ fun ChallengesDetailsScreen(
 }
 
 @Composable
-private fun ChallengeDetail(
+private fun ChallengeDetails(
     challenge: Challenge,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -142,6 +141,7 @@ private fun ChallengeDetail(
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(5.dp))
+
         MarkdownText(
             fontSize = MaterialTheme.typography.bodyLarge.fontSize,
             markdown = challenge.description,
@@ -150,7 +150,7 @@ private fun ChallengeDetail(
     }
 }
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(showBackground = true)
 @Composable
 private fun ChallengesDetailsScreenPreview() {
     ChallengesDetailsScreen(
