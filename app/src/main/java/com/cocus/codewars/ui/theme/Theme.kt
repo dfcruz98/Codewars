@@ -56,6 +56,5 @@ fun CodewarsTheme(
         colorScheme = colorScheme,
         typography = CodewarsTypography,
         content = content,
-        shapes = CodewarsShapes,
     )
 }
