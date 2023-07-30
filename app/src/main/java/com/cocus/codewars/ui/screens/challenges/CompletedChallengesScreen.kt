@@ -1,6 +1,7 @@
 package com.cocus.codewars.ui.screens.challenges
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -137,10 +138,12 @@ internal fun CompletedChallengesScreen(
                 }
             }
 
-            if (showUpButton) {
+            AnimatedVisibility(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                visible = showUpButton
+            ) {
                 ScrollUpButton(
                     modifier = Modifier
-                        .align(Alignment.BottomEnd)
                         .testTag("ScrollUpButton")
                 ) {
                     refreshScope.launch {
@@ -148,7 +151,6 @@ internal fun CompletedChallengesScreen(
                     }
                 }
             }
-
         }
     }
 }
