@@ -37,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -97,17 +98,26 @@ internal fun CompletedChallengesScreen(
         modifier = modifier
             .fillMaxSize()
             .pullRefresh(state)
+            .testTag("CompletedChallengesBox")
     ) {
-        PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter).height(1.dp))
+        PullRefreshIndicator(
+            refreshing, state,
+            Modifier
+                .align(Alignment.TopCenter)
+                .height(1.dp)
+        )
 
         if (challenges.loadState.refresh is LoadState.Loading) {
             CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .testTag("CompletedChallengesLoading")
             )
         } else {
             LazyColumn(
                 modifier = modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .testTag("CompletedChallengesList"),
                 state = launchLazyListState,
             ) {
                 items(count = challenges.itemCount) { index ->
@@ -129,7 +139,9 @@ internal fun CompletedChallengesScreen(
 
             if (showUpButton) {
                 ScrollUpButton(
-                    modifier = Modifier.align(Alignment.BottomEnd)
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .testTag("ScrollUpButton")
                 ) {
                     refreshScope.launch {
                         launchLazyListState.scrollToItem(0)
@@ -168,7 +180,8 @@ private fun CompletedChallengeItem(
             .padding(horizontal = 12.dp, vertical = 4.dp)
             .clickable(
                 onClick = { onClick(challenge) },
-            ),
+            )
+            .testTag("CompletedChallengesItem"),
     ) {
         Column(
             modifier = Modifier

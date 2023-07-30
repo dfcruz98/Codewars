@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,7 +52,7 @@ fun ChallengeDetailsRoute(
 }
 
 @Composable
-internal fun ChallengesDetailsScreen(
+fun ChallengesDetailsScreen(
     state: ChallengeUiState,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -71,7 +72,9 @@ internal fun ChallengesDetailsScreen(
 
             ChallengeUiState.Loading -> {
                 CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .testTag("ChallengeDetailLoading")
                 )
             }
 
@@ -95,12 +98,14 @@ private fun ChallengeDetail(
             .fillMaxSize()
             .padding(10.dp)
             .verticalScroll(rememberScrollState())
+            .testTag("ChallengeDetailsView")
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(onClick = { onBackClick() }) {
                 Icon(
+                    modifier = Modifier.testTag("ChallengeDetailsBack"),
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.back),
                 )
