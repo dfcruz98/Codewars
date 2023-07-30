@@ -22,8 +22,6 @@ fun CodewarsNaveHost(
         completedChallengesScreen { challenge ->
             navController.navigateToChallengeDetails(challenge.id)
         }
-        challengesDetailsScreen {
-            navController.popBackStack()
-        }
+        challengesDetailsScreen()
     }
 }

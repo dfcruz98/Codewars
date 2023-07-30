@@ -14,13 +14,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PanoramaFishEye
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,20 +39,17 @@ import com.cocus.codewars.domain.models.Rank
 import com.cocus.codewars.ui.components.CodewarsRank
 import com.cocus.codewars.ui.components.MarkdownText
 
-
 @Composable
 fun ChallengeDetailsRoute(
-    onBackClick: () -> Unit,
     viewModel: ChallengeDetailsViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.challenge.collectAsStateWithLifecycle()
-    ChallengesDetailsScreen(uiState.value, onBackClick)
+    ChallengesDetailsScreen(uiState.value)
 }
 
 @Composable
 fun ChallengesDetailsScreen(
     state: ChallengeUiState,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -80,7 +75,7 @@ fun ChallengesDetailsScreen(
 
             is ChallengeUiState.Success -> {
                 state.challenge?.let { challenge ->
-                    ChallengeDetail(challenge, onBackClick)
+                    ChallengeDetail(challenge)
                 }
             }
         }
@@ -90,7 +85,6 @@ fun ChallengesDetailsScreen(
 @Composable
 private fun ChallengeDetail(
     challenge: Challenge,
-    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -100,22 +94,11 @@ private fun ChallengeDetail(
             .verticalScroll(rememberScrollState())
             .testTag("ChallengeDetailsView")
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            IconButton(onClick = { onBackClick() }) {
-                Icon(
-                    modifier = Modifier.testTag("ChallengeDetailsBack"),
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.back),
-                )
-            }
-            Text(
-                modifier = Modifier.padding(start = 10.dp),
-                text = challenge.name,
-                style = MaterialTheme.typography.titleLarge,
-            )
-        }
+        Text(
+            modifier = Modifier.padding(start = 10.dp),
+            text = challenge.name,
+            style = MaterialTheme.typography.titleLarge,
+        )
         Spacer(modifier = Modifier.height(5.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -201,7 +184,6 @@ private fun ChallengesDetailsScreenPreview() {
                 publishedAt = "2013-11-05T00:07:31Z",
                 approvedAt = "013-12-20T14:53:06Z",
             )
-        ),
-        onBackClick = {}
+        )
     )
 }

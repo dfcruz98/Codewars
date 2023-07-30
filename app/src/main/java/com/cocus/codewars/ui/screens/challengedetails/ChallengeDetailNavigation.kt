@@ -17,13 +17,13 @@ fun NavController.navigateToChallengeDetails(
     this.navigate("challenge/$challengeId", navOptions)
 }
 
-fun NavGraphBuilder.challengesDetailsScreen(onBackClick: () -> Unit) {
+fun NavGraphBuilder.challengesDetailsScreen() {
     composable(
         route = challengeDetailsNavigationRoute,
         arguments = listOf(
             navArgument(challengeDetailsId) { type = NavType.StringType },
         ),
     ) {
-        ChallengeDetailsRoute(onBackClick)
+        ChallengeDetailsRoute()
     }
 }

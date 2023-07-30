@@ -22,7 +22,6 @@ class ChallengeDetailsScreenTest {
         composeTestRule.activity.setContent {
             ChallengesDetailsScreen(
                 state = ChallengeUiState.Loading,
-                onBackClick = {}
             )
         }
 
@@ -66,7 +65,6 @@ class ChallengeDetailsScreenTest {
                         approvedAt = "013-12-20T14:53:06Z",
                     )
                 ),
-                onBackClick = {}
             )
         }
 
