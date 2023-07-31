@@ -84,7 +84,6 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.1")
     implementation("androidx.paging:paging-runtime-ktx:3.1.1")
     implementation("androidx.paging:paging-compose:3.2.0-rc01")
-    implementation("androidx.compose.material:material:1.0.0")
     implementation("androidx.compose.material:material-icons-extended:1.4.3")
 
     implementation("io.noties.markwon:core:4.6.2")
