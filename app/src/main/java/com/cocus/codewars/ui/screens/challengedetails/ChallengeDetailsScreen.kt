@@ -12,8 +12,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PanoramaFishEye
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Tag
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -93,31 +93,25 @@ private fun ChallengeDetails(
             .verticalScroll(rememberScrollState())
             .testTag("ChallengeDetailsView")
     ) {
-        Text(
-            modifier = Modifier.padding(start = 10.dp),
-            text = challenge.name,
-            style = MaterialTheme.typography.titleLarge,
-        )
-        Spacer(modifier = Modifier.height(5.dp))
+        Row {
+            CodewarsRank(challenge.rank.name, Color.Cyan)
+            Spacer(modifier = Modifier.width(10.dp))
+            Text(
+                text = challenge.name,
+                style = MaterialTheme.typography.titleLarge,
+            )
+        }
+        Spacer(modifier = Modifier.height(15.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            CodewarsRank(challenge.rank.name, Color.Cyan)
             Spacer(modifier = Modifier.width(5.dp))
-            Icon(imageVector = Icons.Filled.PanoramaFishEye, contentDescription = "")
+            Icon(imageVector = Icons.Filled.Star, contentDescription = "")
             Text(
-                text = challenge.totalCompleted.toString(),
+                text = challenge.totalStars.toString(),
                 style = MaterialTheme.typography.bodyMedium
             )
-            Text(
-                modifier = Modifier.padding(horizontal = 5.dp),
-                text = "of",
-                style = MaterialTheme.typography.bodySmall
-            )
-            Text(
-                text = challenge.totalAttempts.toString(),
-                style = MaterialTheme.typography.bodySmall
-            )
+
             Spacer(modifier = Modifier.width(5.dp))
             Icon(
                 imageVector = Icons.Filled.Person,
@@ -125,7 +119,7 @@ private fun ChallengeDetails(
             )
             Text(text = challenge.createdBy.username)
         }
-        Spacer(modifier = Modifier.height(5.dp))
+        Spacer(modifier = Modifier.height(10.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -138,7 +132,7 @@ private fun ChallengeDetails(
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = stringResource(R.string.description),
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleLarge
         )
         Spacer(modifier = Modifier.height(5.dp))
 
