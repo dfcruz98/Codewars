@@ -11,6 +11,7 @@ import com.cocus.codewars.data.local.entities.CreatedByEntity
 import com.cocus.codewars.data.local.entities.RankEntity
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import okio.IOException
@@ -72,34 +73,34 @@ class ChallengeDaoTest {
     }
 
     @Test
-    fun insertChallenge() = runBlocking {
+    fun `insert challenge`() = runBlocking {
         challengeDao.insert(baseEntity)
-        val result = challengeDao.get(baseEntity.id)
+        val result = challengeDao.get(baseEntity.id).first()
         assertThat(result).isEqualTo(baseEntity)
     }
 
     @Test
-    fun updateChallenge() = runTest {
+    fun `update challenge`() = runTest {
         challengeDao.insert(baseEntity)
         val update = baseEntity.copy(name = "Valid Parenthesis")
         challengeDao.update(update)
-        val result = challengeDao.get(baseEntity.id)
+        val result = challengeDao.get(baseEntity.id).first()
         assertThat(result).isEqualTo(update)
     }
 
     @Test
-    fun deleteChallenge() = runTest {
+    fun `delete challenge`() = runTest {
         challengeDao.insert(baseEntity)
         challengeDao.delete(baseEntity)
-        val result = challengeDao.get(baseEntity.id)
-        assertThat(result).isEqualTo(baseEntity)
+        val result = challengeDao.get(baseEntity.id).first()
+        assertThat(result).isEqualTo(null)
     }
 
     @Test
-    fun clearAll() = runTest {
+    fun `clear all`() = runTest {
         challengeDao.insert(baseEntity)
         challengeDao.clearAll()
-        val challenges = challengeDao.getAll()
-        //assertThat(challenges.size).isEqualTo(0)
+        val challenges = challengeDao.getAll().first()
+        assertThat(challenges).isEqualTo(null)
     }
 }

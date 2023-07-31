@@ -23,8 +23,7 @@ class CompletedChallengesPagesDaoTest {
     private lateinit var db: CodewarsDatabase
 
     private val baseEntity = CompletedChallengePageEntity(
-        id = 100,
-        user = "mike",
+        challengeId = "100",
         previousPage = null,
         nextPage = 1,
     )
@@ -45,31 +44,25 @@ class CompletedChallengesPagesDaoTest {
     }
 
     @Test
-    fun insertPage() = runTest {
+    fun `get page by id`() = runTest {
         dao.insert(listOf(baseEntity))
-        val page = dao.getByUser(baseEntity.user)
-        assertThat(page.id).isEqualTo(baseEntity.id)
+        val page = dao.get(baseEntity.challengeId)
+        assertThat(page).isNotNull()
     }
 
     @Test
-    fun getByIdPage() = runTest {
+    fun `delete page`() = runTest {
         dao.insert(listOf(baseEntity))
-        val page = dao.getById(baseEntity.id)
-        assertThat(page.id).isEqualTo(baseEntity.id)
+        dao.delete(baseEntity)
+        val page = dao.get(baseEntity.challengeId)
+        assertThat(page).isNull()
     }
 
     @Test
-    fun getByIdUser() = runTest {
-        dao.insert(listOf(baseEntity))
-        val page = dao.getByUser(baseEntity.user)
-        assertThat(page.id).isEqualTo(baseEntity.id)
-    }
-
-    @Test
-    fun  deleteAll() = runTest {
+    fun `delete all`() = runTest {
         dao.insert(listOf(baseEntity))
         dao.deleteAll()
-        val page = dao.getById(baseEntity.id)
-        assertThat(page).isEqualTo(null)
+        val page = dao.get(baseEntity.challengeId)
+        assertThat(page).isNull()
     }
 }

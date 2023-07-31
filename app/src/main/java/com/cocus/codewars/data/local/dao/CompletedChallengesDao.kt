@@ -10,7 +10,10 @@ import com.cocus.codewars.data.local.entities.CompletedChallengeEntity
 interface CompletedChallengesDao {
 
     @Upsert
-    suspend fun upsertCompletedChallenges(challenges: List<CompletedChallengeEntity>)
+    suspend fun insert(challenges: List<CompletedChallengeEntity>)
+
+    @Query("SELECT * FROM completed_challenges WHERE id = :id")
+    suspend fun get(id: String): CompletedChallengeEntity?
 
     @Query("SELECT * FROM completed_challenges")
     fun pagingSource(): PagingSource<Int, CompletedChallengeEntity>

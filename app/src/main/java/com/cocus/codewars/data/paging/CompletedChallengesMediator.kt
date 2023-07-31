@@ -81,7 +81,7 @@ class CompletedChallengesMediator @Inject constructor(
                     )
                 }
 
-                completedChallengesDao.upsertCompletedChallenges(challenges)
+                completedChallengesDao.insert(challenges)
                 completedChallengesPagesDao.insert(pages)
             }
 

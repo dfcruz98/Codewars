@@ -5,8 +5,8 @@ import com.cocus.codewars.domain.models.ApprovedBy
 import com.cocus.codewars.domain.models.Challenge
 import com.cocus.codewars.domain.models.CreatedBy
 import com.cocus.codewars.domain.models.Rank
-import com.cocus.codewars.testrepositories.TestChallengeRepository
-import com.google.common.truth.Truth
+import com.cocus.codewars.data.repositories.TestChallengeRepository
+import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -61,7 +61,7 @@ class ChallengeDetailsViewModelTest {
 
     @Test
     fun `check initial state`() = runTest {
-        Truth.assertThat(viewModel.challenge.value)
+        assertThat(viewModel.challenge.value)
             .isInstanceOf(ChallengeUiState.Loading::class.java)
     }
 
@@ -71,13 +71,13 @@ class ChallengeDetailsViewModelTest {
             viewModel.challenge.collect()
         }
 
-        Truth.assertThat(viewModel.challenge.value)
+        assertThat(viewModel.challenge.value)
             .isInstanceOf(ChallengeUiState.Loading::class.java)
 
         repository.emi(challenge)
 
         val challenge = viewModel.challenge.value
-        Truth.assertThat(challenge).isInstanceOf(ChallengeUiState.Success::class.java)
+        assertThat(challenge).isInstanceOf(ChallengeUiState.Success::class.java)
     }
 
     @Test
@@ -86,12 +86,12 @@ class ChallengeDetailsViewModelTest {
             viewModel.challenge.collect()
         }
 
-        Truth.assertThat(viewModel.challenge.value)
+        assertThat(viewModel.challenge.value)
             .isInstanceOf(ChallengeUiState.Loading::class.java)
 
         repository.emi(null)
 
         val challenge = viewModel.challenge.value
-        Truth.assertThat(challenge).isInstanceOf(ChallengeUiState.NotFound::class.java)
+        assertThat(challenge).isInstanceOf(ChallengeUiState.NotFound::class.java)
     }
 }

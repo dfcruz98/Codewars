@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -102,10 +101,10 @@ internal fun CompletedChallengesScreen(
             .testTag("CompletedChallengesBox")
     ) {
         PullRefreshIndicator(
-            refreshing, state,
-            Modifier
-                .align(Alignment.TopCenter)
-                .height(1.dp)
+            refreshing = refreshing,
+            state = state,
+            modifier = Modifier
+                .align(Alignment.TopCenter),
         )
 
         if (challenges.loadState.refresh is LoadState.Loading) {

@@ -25,8 +25,6 @@ class TestCodewarsApi : CodewarsApi {
                 )
             )
         )
-
-
     }
 
     override suspend fun getChallenge(name: String): Response<ChallengeDto> {
