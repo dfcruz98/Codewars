@@ -21,7 +21,7 @@ class ChallengeDetailsScreenTest {
     fun `loading state`() {
         composeTestRule.activity.setContent {
             ChallengesDetailsScreen(
-                state = ChallengeUiState.Loading,
+                uiState = ChallengeUiState.Loading,
             )
         }
 
@@ -34,7 +34,7 @@ class ChallengeDetailsScreenTest {
     fun `show challenge details`() {
         composeTestRule.activity.setContent {
             ChallengesDetailsScreen(
-                state = ChallengeUiState.Success(
+                uiState = ChallengeUiState.Success(
                     Challenge(
                         id = "5277c8a221e209d3f6000b56",
                         name = "Valid Braces",

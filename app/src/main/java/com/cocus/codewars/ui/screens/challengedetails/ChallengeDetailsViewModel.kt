@@ -37,7 +37,11 @@ class ChallengeDetailsViewModel @Inject constructor(
                     is Result.Error -> ChallengeUiState.Error
                     Result.Loading -> ChallengeUiState.Loading
                     is Result.Success -> {
-                        ChallengeUiState.Success(result.data)
+                        if (result.data == null) {
+                            ChallengeUiState.NotFound
+                        } else {
+                            ChallengeUiState.Success(result.data)
+                        }
                     }
                 }
             }
@@ -47,6 +51,7 @@ class ChallengeDetailsViewModel @Inject constructor(
 
 sealed interface ChallengeUiState {
     data class Success(val challenge: Challenge?) : ChallengeUiState
+    object NotFound : ChallengeUiState
     object Error : ChallengeUiState
     object Loading : ChallengeUiState
 }

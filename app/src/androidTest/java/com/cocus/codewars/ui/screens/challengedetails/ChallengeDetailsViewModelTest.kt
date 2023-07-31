@@ -54,37 +54,44 @@ class ChallengeDetailsViewModelTest {
     @Before
     fun setup() {
         viewModel = ChallengeDetailsViewModel(
-            savedStateHandle = SavedStateHandle(),
+            savedStateHandle = SavedStateHandle(mapOf(challengeDetailsId to "5277c8a221e209d3f6000b56")),
             repository = repository
         )
     }
 
     @Test
-    fun testInitialStateIsLoading() = runTest {
-        Truth.assertThat(viewModel.challenge).isEqualTo(ChallengeUiState.Loading)
+    fun `check initial state`() = runTest {
+        Truth.assertThat(viewModel.challenge.value)
+            .isInstanceOf(ChallengeUiState.Loading::class.java)
     }
 
     @Test
-    fun testGetChallengeValidParameter() = runTest {
-        val collectJob = launch(Dispatchers.Unconfined) { viewModel.challenge.collect() }
+    fun `challenge found state`() = runTest {
+        backgroundScope.launch(Dispatchers.Unconfined) {
+            viewModel.challenge.collect()
+        }
 
-        repository.sendChallenge(listOf(challenge))
+        Truth.assertThat(viewModel.challenge.value)
+            .isInstanceOf(ChallengeUiState.Loading::class.java)
+
+        repository.emi(challenge)
 
         val challenge = viewModel.challenge.value
-        Truth.assertThat(challenge).isEqualTo(ChallengeUiState.Success::class)
-
-        collectJob.cancel()
+        Truth.assertThat(challenge).isInstanceOf(ChallengeUiState.Success::class.java)
     }
 
     @Test
-    fun testGetChallengeEmptyParameter() = runTest {
-        val collectJob = launch(Dispatchers.Unconfined) { viewModel.challenge.collect() }
+    fun `challenge not found state`() = runTest {
+        backgroundScope.launch(Dispatchers.Unconfined) {
+            viewModel.challenge.collect()
+        }
 
-        repository.sendChallenge(listOf())
+        Truth.assertThat(viewModel.challenge.value)
+            .isInstanceOf(ChallengeUiState.Loading::class.java)
+
+        repository.emi(null)
 
         val challenge = viewModel.challenge.value
-        Truth.assertThat(challenge).isEqualTo(ChallengeUiState.Loading::class)
-
-        collectJob.cancel()
+        Truth.assertThat(challenge).isInstanceOf(ChallengeUiState.NotFound::class.java)
     }
 }

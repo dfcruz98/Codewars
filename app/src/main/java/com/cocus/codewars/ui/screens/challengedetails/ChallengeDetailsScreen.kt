@@ -47,7 +47,7 @@ fun ChallengeDetailsRoute(
 }
 
 @Composable
-private fun ChallengesDetailsScreen(
+fun ChallengesDetailsScreen(
     uiState: ChallengeUiState,
     modifier: Modifier = Modifier,
 ) {
@@ -76,6 +76,14 @@ private fun ChallengesDetailsScreen(
                 uiState.challenge?.let { challenge ->
                     ChallengeDetails(challenge)
                 }
+            }
+
+            ChallengeUiState.NotFound -> {
+                Toast.makeText(
+                    LocalContext.current,
+                    stringResource(R.string.challenge_not_found),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
