@@ -8,4 +8,7 @@
     <string name="completed_challenges">Completed Challenges</string>
     <string name="challenge_details">Challenge Details</string>
     <string name="challenge_not_found">Challenge not found</string>
+    <string name="creator">Creator</string>
+    <string name="challenge_stars">Challenge Stars</string>
+    <string name="tag">Tag</string>
 </resources>

@@ -101,7 +101,10 @@ private fun ChallengeDetails(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Spacer(modifier = Modifier.width(5.dp))
-            Icon(imageVector = Icons.Filled.Star, contentDescription = "")
+            Icon(
+                imageVector = Icons.Filled.Star,
+                contentDescription = stringResource(R.string.challenge_stars)
+            )
             Text(
                 text = challenge.totalStars.toString(),
                 style = MaterialTheme.typography.bodyMedium
@@ -110,7 +113,7 @@ private fun ChallengeDetails(
             Spacer(modifier = Modifier.width(5.dp))
             Icon(
                 imageVector = Icons.Filled.Person,
-                contentDescription = ""
+                contentDescription = stringResource(R.string.creator)
             )
             Text(text = challenge.createdBy.username)
         }
@@ -118,9 +121,9 @@ private fun ChallengeDetails(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(imageVector = Icons.Filled.Tag, contentDescription = "")
+            Icon(imageVector = Icons.Filled.Tag, contentDescription = stringResource(R.string.tag))
             Text(
-                text = challenge.tags.joinToString(", "),
+                text = challenge.tags.joinToString(),
                 style = MaterialTheme.typography.bodySmall,
             )
         }
