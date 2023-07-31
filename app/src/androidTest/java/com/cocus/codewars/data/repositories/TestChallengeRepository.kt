@@ -1,9 +1,8 @@
 package com.cocus.codewars.data.repositories
 
 import androidx.paging.PagingData
-import com.cocus.codewars.domain.models.Challenge
-import com.cocus.codewars.domain.models.CompletedChallenge
-import com.cocus.codewars.domain.repositories.ChallengesRepository
+import com.cocus.codewars.data.models.Challenge
+import com.cocus.codewars.data.models.CompletedChallenge
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 

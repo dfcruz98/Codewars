@@ -3,8 +3,8 @@ package com.cocus.codewars.ui.screens.challengedetails
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cocus.codewars.domain.models.Challenge
-import com.cocus.codewars.domain.repositories.ChallengesRepository
+import com.cocus.codewars.data.models.Challenge
+import com.cocus.codewars.data.repositories.ChallengesRepository
 import com.cocus.codewars.utils.Result
 import com.cocus.codewars.utils.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel

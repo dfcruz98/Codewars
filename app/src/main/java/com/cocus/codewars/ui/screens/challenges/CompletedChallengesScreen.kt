@@ -36,7 +36,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cocus.codewars.R
-import com.cocus.codewars.domain.models.CompletedChallenge
+import com.cocus.codewars.data.models.CompletedChallenge
 import com.cocus.codewars.ui.components.CodewarsChip
 import kotlinx.coroutines.launch
 

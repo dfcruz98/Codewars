@@ -1,10 +1,10 @@
 package com.cocus.codewars.ui.screens.challengedetails
 
 import androidx.lifecycle.SavedStateHandle
-import com.cocus.codewars.domain.models.ApprovedBy
-import com.cocus.codewars.domain.models.Challenge
-import com.cocus.codewars.domain.models.CreatedBy
-import com.cocus.codewars.domain.models.Rank
+import com.cocus.codewars.data.models.ApprovedBy
+import com.cocus.codewars.data.models.Challenge
+import com.cocus.codewars.data.models.CreatedBy
+import com.cocus.codewars.data.models.Rank
 import com.cocus.codewars.data.repositories.TestChallengeRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.Dispatchers

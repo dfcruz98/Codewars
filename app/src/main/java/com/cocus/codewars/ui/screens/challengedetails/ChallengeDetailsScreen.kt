@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cocus.codewars.R
-import com.cocus.codewars.domain.models.ApprovedBy
-import com.cocus.codewars.domain.models.Challenge
-import com.cocus.codewars.domain.models.CreatedBy
-import com.cocus.codewars.domain.models.Rank
+import com.cocus.codewars.data.models.ApprovedBy
+import com.cocus.codewars.data.models.Challenge
+import com.cocus.codewars.data.models.CreatedBy
+import com.cocus.codewars.data.models.Rank
 import com.cocus.codewars.ui.components.CodewarsRank
 import com.cocus.codewars.ui.components.MarkdownText
 

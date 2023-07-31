@@ -1,4 +1,4 @@
-package com.cocus.codewars.domain.models
+package com.cocus.codewars.data.models
 
 data class Challenge(
     val id: String,

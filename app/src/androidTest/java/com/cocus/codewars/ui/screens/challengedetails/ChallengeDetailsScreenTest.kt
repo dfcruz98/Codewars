@@ -5,10 +5,10 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import com.cocus.codewars.MainActivity
-import com.cocus.codewars.domain.models.ApprovedBy
-import com.cocus.codewars.domain.models.Challenge
-import com.cocus.codewars.domain.models.CreatedBy
-import com.cocus.codewars.domain.models.Rank
+import com.cocus.codewars.data.models.ApprovedBy
+import com.cocus.codewars.data.models.Challenge
+import com.cocus.codewars.data.models.CreatedBy
+import com.cocus.codewars.data.models.Rank
 import org.junit.Rule
 import org.junit.Test
 
