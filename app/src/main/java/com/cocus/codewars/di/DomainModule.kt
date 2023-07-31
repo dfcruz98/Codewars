@@ -1,7 +1,7 @@
 package com.cocus.codewars.di
 
 import com.cocus.codewars.data.local.CodewarsDatabase
-import com.cocus.codewars.data.remote.services.CodewarsApi
+import com.cocus.codewars.data.remote.api.CodewarsApi
 import com.cocus.codewars.data.repositories.ChallengesRepositoryImpl
 import com.cocus.codewars.domain.repositories.ChallengesRepository
 import dagger.Module

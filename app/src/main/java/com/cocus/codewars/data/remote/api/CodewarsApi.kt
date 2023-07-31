@@ -1,4 +1,4 @@
-package com.cocus.codewars.data.remote.services
+package com.cocus.codewars.data.remote.api
 
 import com.cocus.codewars.data.remote.dto.ChallengeDto
 import com.cocus.codewars.data.remote.dto.CompletedChallengesPageDto
@@ -13,7 +13,7 @@ interface CodewarsApi {
     suspend fun getCompletedChallenges(
         @Path("user") user: String,
         @Query("page") page: Int,
-    ): CompletedChallengesPageDto
+    ): Response<CompletedChallengesPageDto>
 
     @GET("code-challenges/{slug}")
     suspend fun getChallenge(

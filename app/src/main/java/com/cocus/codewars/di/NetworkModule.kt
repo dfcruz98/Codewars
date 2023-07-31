@@ -1,6 +1,6 @@
 package com.cocus.codewars.di
 
-import com.cocus.codewars.data.remote.services.CodewarsApi
+import com.cocus.codewars.data.remote.api.CodewarsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

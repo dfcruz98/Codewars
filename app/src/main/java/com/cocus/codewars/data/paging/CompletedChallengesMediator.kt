@@ -9,10 +9,10 @@ import androidx.room.withTransaction
 import com.cocus.codewars.data.local.CodewarsDatabase
 import com.cocus.codewars.data.local.entities.CompletedChallengeEntity
 import com.cocus.codewars.data.local.entities.CompletedChallengePageEntity
-import com.cocus.codewars.data.remote.services.CodewarsApi
+import com.cocus.codewars.data.remote.api.CodewarsApi
+import com.cocus.codewars.data.remote.utils.RequestResult
+import com.cocus.codewars.data.remote.utils.tryMakingRequest
 import com.cocus.codewars.data.toCompletedChallengeEntity
-import okio.IOException
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
@@ -29,69 +29,78 @@ class CompletedChallengesMediator @Inject constructor(
         loadType: LoadType,
         state: PagingState<Int, CompletedChallengeEntity>
     ): MediatorResult {
-        return try {
-            Log.d("CompletedChallengesMediator", "loadType=$loadType")
 
-            val currentPage = when (loadType) {
-                LoadType.REFRESH -> {
-                    val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                    remoteKeys?.nextPage?.minus(1) ?: 0
-                }
+        Log.d("CompletedChallengesMediator", "loadType=$loadType")
 
-                LoadType.PREPEND -> {
-                    val remoteKeys = getRemoteKeyForFirstItem(state)
-                    val prevPage = remoteKeys?.previousPage ?: return MediatorResult.Success(
-                        endOfPaginationReached = remoteKeys != null
-                    )
-                    prevPage
-                }
-
-                LoadType.APPEND -> {
-                    val remoteKeys = getRemoteKeyForLastItem(state)
-                    val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(
-                        endOfPaginationReached = remoteKeys != null
-                    )
-                    nextPage
-                }
+        val currentPage = when (loadType) {
+            LoadType.REFRESH -> {
+                val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
+                remoteKeys?.nextPage?.minus(1) ?: 0
             }
 
-            val response = api.getCompletedChallenges(user, currentPage)
-            val endOfPaginationReached = response.data.isEmpty()
+            LoadType.PREPEND -> {
+                val remoteKeys = getRemoteKeyForFirstItem(state)
+                val prevPage = remoteKeys?.previousPage ?: return MediatorResult.Success(
+                    endOfPaginationReached = remoteKeys != null
+                )
+                prevPage
+            }
 
-            val prevPage = if (currentPage == 0) null else currentPage - 1
-            val nextPage = if (endOfPaginationReached) null else currentPage + 1
+            LoadType.APPEND -> {
+                val remoteKeys = getRemoteKeyForLastItem(state)
+                val nextPage = remoteKeys?.nextPage ?: return MediatorResult.Success(
+                    endOfPaginationReached = remoteKeys != null
+                )
+                nextPage
+            }
+        }
 
-            database.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    completedChallengesDao.deleteAll()
-                    completedChallengesPagesDao.deleteAll()
-                }
+        return when (val response =
+            tryMakingRequest { api.getCompletedChallenges(user, currentPage) }
+        ) {
+            is RequestResult.Error -> {
+                return MediatorResult.Error(Throwable())
+            }
 
-                val challenges = mutableListOf<CompletedChallengeEntity>()
-                val pages = mutableListOf<CompletedChallengePageEntity>()
+            is RequestResult.Exception -> {
+                return MediatorResult.Error(response.ex)
+            }
 
-                response.data.forEach { challenge ->
-                    challenges.add(challenge.toCompletedChallengeEntity(user))
-                    pages.add(
-                        CompletedChallengePageEntity(
-                            challengeId = challenge.id,
-                            previousPage = prevPage,
-                            nextPage = nextPage
+            is RequestResult.Success -> {
+
+                val endOfPaginationReached = response.value.data.isEmpty()
+
+                val prevPage = if (currentPage == 0) null else currentPage - 1
+                val nextPage = if (endOfPaginationReached) null else currentPage + 1
+
+                database.withTransaction {
+                    if (loadType == LoadType.REFRESH) {
+                        completedChallengesDao.deleteAll()
+                        completedChallengesPagesDao.deleteAll()
+                    }
+
+                    val challenges = mutableListOf<CompletedChallengeEntity>()
+                    val pages = mutableListOf<CompletedChallengePageEntity>()
+
+                    response.value.data.forEach { challenge ->
+                        challenges.add(challenge.toCompletedChallengeEntity(user))
+                        pages.add(
+                            CompletedChallengePageEntity(
+                                challengeId = challenge.id,
+                                previousPage = prevPage,
+                                nextPage = nextPage
+                            )
                         )
-                    )
+                    }
+
+                    completedChallengesDao.insert(challenges)
+                    completedChallengesPagesDao.insert(pages)
                 }
 
-                completedChallengesDao.insert(challenges)
-                completedChallengesPagesDao.insert(pages)
+                MediatorResult.Success(
+                    endOfPaginationReached = endOfPaginationReached
+                )
             }
-
-            MediatorResult.Success(
-                endOfPaginationReached = endOfPaginationReached
-            )
-        } catch (io: IOException) {
-            return MediatorResult.Error(io)
-        } catch (ex: HttpException) {
-            return MediatorResult.Error(ex)
         }
     }
 
