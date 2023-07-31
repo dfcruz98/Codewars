@@ -1,6 +1,6 @@
 package com.cocus.codewars.ui.screens.challengedetails
 
-import android.widget.Toast
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,14 +55,6 @@ fun ChallengesDetailsScreen(
             .fillMaxSize()
     ) {
         when (uiState) {
-            ChallengeUiState.Error -> {
-                Toast.makeText(
-                    LocalContext.current,
-                    stringResource(R.string.error_getting_challenge_details),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-
             ChallengeUiState.Loading -> {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -78,12 +69,8 @@ fun ChallengesDetailsScreen(
                 }
             }
 
-            ChallengeUiState.NotFound -> {
-                Toast.makeText(
-                    LocalContext.current,
-                    stringResource(R.string.challenge_not_found),
-                    Toast.LENGTH_SHORT
-                ).show()
+            else -> {
+                Log.d("ChallengesDetailsScreen", "uiState=$uiState")
             }
         }
     }
